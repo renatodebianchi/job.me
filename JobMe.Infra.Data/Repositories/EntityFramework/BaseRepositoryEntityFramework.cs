@@ -10,7 +10,7 @@ namespace Infra.Data.Repositories.EntityFramework
 { 
     public class BaseRepositoryEntityFramework<TSource> : IGenericRepository<TSource> where TSource : class, IGenericEntity 
     { 
-        protected readonly ApplicationDbContext _context; 
+        protected readonly DbContext _context; 
         public BaseRepositoryEntityFramework(ApplicationDbContext context) 
         { 
             _context = context; 
@@ -72,4 +72,5 @@ namespace Infra.Data.Repositories.EntityFramework
             } 
         } 
     } 
+
 } 
