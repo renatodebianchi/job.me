@@ -44,4 +44,5 @@ namespace Api.Hubs
             return retorno; 
         } 
     } 
+
 } 

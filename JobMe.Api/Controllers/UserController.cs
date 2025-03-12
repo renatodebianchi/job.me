@@ -55,6 +55,8 @@ namespace JobMe.Api.Controllers
             var retorno = await _mediator.Send(request, cancellationToken);
             
             return Ok(retorno); 
-        } 
+        }
     } 
+
+
 } 
