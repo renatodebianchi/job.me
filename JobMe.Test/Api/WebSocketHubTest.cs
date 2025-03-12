@@ -3,7 +3,7 @@ using MediatR;
 using Microsoft.AspNetCore.SignalR;
 using Moq;
 
-namespace JobMe.Test
+namespace JobMe.Test.Api
 {
     public class WebSocketHubTest
     {

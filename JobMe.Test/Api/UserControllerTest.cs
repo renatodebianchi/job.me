@@ -10,7 +10,7 @@ using Features.Users.Update;
 using Features.Users.Delete;
 using Application.Responses;
 
-namespace JobMe.Test
+namespace JobMe.Test.Api
 {
     public class UserControllerTest
     {
