@@ -5,6 +5,9 @@ namespace Features.Users.Delete
 {
     public class DeleteUserCommandRequest : QuickCommandRequest<User>
     {
+        public DeleteUserCommandRequest() : base()
+        {
+        }
         public int Id { get; set; }
         public override bool IsValid()
         {
@@ -16,4 +19,5 @@ namespace Features.Users.Delete
             return true;
         }
     }
+    
 }

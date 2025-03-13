@@ -5,6 +5,9 @@ namespace Features.Users.Add
 {
     public class AddUserCommandRequest : QuickCommandRequest<User>
     {
+        public AddUserCommandRequest() : base()
+        {
+        }
         public override bool IsValid()
         {
             if (DataModel == null) {
@@ -31,4 +34,5 @@ namespace Features.Users.Add
             return isValid;
         }
     }
+
 }

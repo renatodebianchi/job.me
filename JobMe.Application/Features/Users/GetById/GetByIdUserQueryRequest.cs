@@ -4,6 +4,9 @@ namespace Features.Users.GetById
 {
     public class GetByIdUserQueryRequest : QuickRequest
     {
+        public GetByIdUserQueryRequest() : base()
+        {
+        }
         public int Id { get; set; }
         // Add any additional properties or methods if needed
         public override bool IsValid()
@@ -16,4 +19,5 @@ namespace Features.Users.GetById
             return true;
         }
     }
+
 }

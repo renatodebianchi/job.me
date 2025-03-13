@@ -5,6 +5,9 @@ namespace Features.Users.Update
 {
     public class UpdateUserCommandRequest : QuickCommandRequest<User>
     {
+        public UpdateUserCommandRequest() : base()
+        {
+        }
         public int Id { get; set; }
         public override bool IsValid()
         {
@@ -37,4 +40,5 @@ namespace Features.Users.Update
             return isValid;
         }
     }
+    
 }

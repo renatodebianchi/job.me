@@ -4,6 +4,7 @@ namespace Application.Requests {
     { 
         public BaseRequest() 
         { 
+            Notifications = new Dictionary<string, string>(); 
         } 
         public Dictionary<string, string> Notifications; 
         public abstract bool IsValid(); 
