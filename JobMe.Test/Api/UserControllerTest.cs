@@ -55,7 +55,9 @@ namespace JobMe.Test.Api
             // Assert
             var okResult = Assert.IsType<OkObjectResult>(result);
             var user = Assert.IsType<BaseResponse>(okResult.Value);
-            Assert.Equal(userId, (user.Data as User).Id);
+            var userData = user.Data as User;
+            Assert.NotNull(userData);
+            Assert.Equal(userId, userData.Id);
         }
 
         [Fact]
@@ -73,7 +75,9 @@ namespace JobMe.Test.Api
             // Assert
             var okResult = Assert.IsType<OkObjectResult>(result);
             var addedUser = Assert.IsType<BaseResponse>(okResult.Value);
-            Assert.Equal(user.Id, (addedUser.Data as User).Id);
+            var addedUserData = addedUser.Data as User;
+            Assert.NotNull(addedUserData);
+            Assert.Equal(user.Id, addedUserData.Id);
         }
 
         [Fact]
@@ -92,7 +96,9 @@ namespace JobMe.Test.Api
             // Assert
             var okResult = Assert.IsType<OkObjectResult>(result);
             var updatedUser = Assert.IsType<BaseResponse>(okResult.Value);
-            Assert.Equal(userId, (updatedUser.Data as User).Id);
+            var updatedUserData = updatedUser.Data as User;
+            Assert.NotNull(updatedUserData);
+            Assert.Equal(userId, updatedUserData.Id);
         }
 
         [Fact]

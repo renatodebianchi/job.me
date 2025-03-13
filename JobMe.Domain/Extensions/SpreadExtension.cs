@@ -22,13 +22,19 @@ namespace Domain.Extensions
                 try { 
                     if (sourceProp.GetValue(source) == null) 
                         continue; 
-                    if (sourceProp.PropertyType.Name.Equals("DateTime")) 
-                        if (((DateTime)sourceProp.GetValue(source)) == (new DateTime())) 
-                            continue; 
+                    if (sourceProp.PropertyType == typeof(DateTime?))
+                    {
+                        if (sourceProp.GetValue(source) == null)
+                            continue;
+                        if (((DateTime?)sourceProp.GetValue(source)) == new DateTime())
+                            continue;
+                    }
+                    
                     targetProp?.SetValue(target, sourceProp.GetValue(source)); 
                 } catch (Exception e) { Console.WriteLine("Erro ao processar Spread: " + e.Message); } 
             } 
             return target; 
         } 
     } 
+
 } 

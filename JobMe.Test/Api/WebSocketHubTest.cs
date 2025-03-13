@@ -51,7 +51,7 @@ namespace JobMe.Test.Api
         public async Task OnDisconnectedAsync_ShouldCallBaseMethod()
         {
             // Act
-            await _hub.OnDisconnectedAsync(null);
+            await _hub.OnDisconnectedAsync(new Exception("Disconnected"));
 
             // Assert
             // No additional assertions needed as we are just verifying the method completes without exceptions
