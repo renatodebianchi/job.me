@@ -9,7 +9,7 @@
 
   - Entity Framework
     - Run the following command in a CLI prompt after installing .NET SDK
-    `dotnet tool install --global dotnet-ef` 
+    ```dotnet tool install --global dotnet-ef``` 
 
 ## How to set this project up
 - Clone this repo
