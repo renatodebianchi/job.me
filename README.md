@@ -6,15 +6,14 @@
 ## Requirements
 <details>
   <summary>.NET 8</summary>
-  -Download the .NET 8 SDK from [Microsoft](https://dotnet.microsoft.com/en-us/download)
+  - Download the .NET 8 SDK from [Microsoft](https://dotnet.microsoft.com/en-us/download)
 </details>
 
 <details>
   <summary>Entity Framework</summary>
-  Run the following command in a CLI prompt after installing .NET SDK
-  ```
-  dotnet tool install --global dotnet-ef
-  ```
+  - Run the following command in a CLI prompt after installing .NET SDK
+  ``` dotnet tool install --global dotnet-ef
+
 </details>
 
 ## How to set this project up
