@@ -1,11 +1,17 @@
-using System; 
 using Microsoft.EntityFrameworkCore; 
-using Microsoft.Extensions.DependencyInjection; 
-using Microsoft.Extensions.Hosting; 
-using Microsoft.Extensions.Logging; 
 using Polly; 
+
+/// <summary>
+/// Provides an extension method to migrate the database context.
+/// </summary>
 public static class MigrateDbContextExtensionClass 
 { 
+    /// <summary>
+    /// Migrates the database context.
+    /// </summary>
+    /// <typeparam name="TContext">The type of the database context.</typeparam>
+    /// <param name="host">The host instance.</param>
+    /// <returns>The host instance.</returns>
     public static IHost MigrateDbContext<TContext>(this IHost host) 
         where TContext : DbContext 
     { 
@@ -25,7 +31,7 @@ public static class MigrateDbContextExtensionClass
                 }); 
                 retry.Execute(() => 
                 { 
-                        context.Database.Migrate(); 
+                        context?.Database.Migrate(); 
                 }); 
                 logger.LogInformation($"Migrated database associated with context {typeof(TContext).Name}"); 
             } 

@@ -11,14 +11,29 @@ using System.IO;
 using System.Reflection; 
 namespace JobMe.Api 
 { 
+    /// <summary>
+    /// The startup class for configuring services and the app's request pipeline.
+    /// </summary>
     public class Startup 
     { 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Startup"/> class.
+        /// </summary>
+        /// <param name="configuration">The configuration.</param>
         public Startup(IConfiguration configuration) 
         { 
             Configuration = configuration; 
         } 
+
+        /// <summary>
+        /// Gets the configuration.
+        /// </summary>
         public IConfiguration Configuration { get; } 
-        // This method gets called by the runtime. Use this method to add services to the container. 
+        
+        /// <summary>
+        /// Configures the services for the application.
+        /// </summary>
+        /// <param name="services">The service collection to add services to.</param>
         public void ConfigureServices(IServiceCollection services) 
         { 
             services.AddInfrastructure(Configuration); 
@@ -44,7 +59,12 @@ namespace JobMe.Api
                 c.IncludeXmlComments(xmlPath); 
             }); 
         } 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline. 
+        
+        /// <summary>
+        /// Configures the HTTP request pipeline.
+        /// </summary>
+        /// <param name="app">The application builder.</param>
+        /// <param name="env">The web host environment.</param>
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env) 
         { 
             if (env.IsDevelopment()) 
