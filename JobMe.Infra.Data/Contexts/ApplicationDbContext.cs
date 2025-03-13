@@ -8,7 +8,8 @@ namespace Infra.Data.Contexts
         private readonly IConfiguration _configuration; 
 
         public DbSet<User> Users { get; set; }
-
+        public DbSet<Character> Jobs { get; set; }
+        
         public ApplicationDbContext(IConfiguration configuration, DbContextOptions<ApplicationDbContext> options) : base(options) 
         { 
             _configuration = configuration; 
