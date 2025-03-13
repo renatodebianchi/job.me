@@ -9,13 +9,13 @@
 
   - Entity Framework
     - Run the following command in a CLI prompt after installing .NET SDK
-    ```dotnet tool install --global dotnet-ef``` 
+    - `dotnet tool install --global dotnet-ef`
 
 ## How to set this project up
 - Clone this repo
 - Open a command line prompt
 - Navigate to project folder
 - Navigate to ./JobMe.Api folder
-- Execute: <font color="gray">dotnet run</font>
+- Execute: `dotnet run`
 
 ### Thanks for viewing this content
