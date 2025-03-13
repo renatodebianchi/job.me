@@ -1,5 +1,4 @@
 using Domain.Entities;
-using Domain.Interfaces.Entities;
 using Domain.Interfaces.Repositories;
 using Infra.Data.Contexts;
 using Infra.Data.Repositories.EntityFramework;
@@ -7,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Moq;
 
-namespace JobMe.Infra.Data.Repositories.EntityFramework
+namespace JobMe.Test.Data
 {
     public class ApplicationDbContextTest : ApplicationDbContext
     { 
@@ -65,7 +64,19 @@ namespace JobMe.Infra.Data.Repositories.EntityFramework
             var deleteResult = await _repository.DeleteAsync(entity.Id);
 
             // Assert
-            Assert.Equal(1, deleteResult);
+            Assert.Equal(entity.Id, deleteResult);
+        }
+
+        [Fact]
+        public async Task DeleteAsync_ShouldThrowInvalidDataException()
+        {
+            // Arrange
+            
+            // Act
+            
+            // Assert
+            await Assert.ThrowsAsync<InvalidDataException>(async () => await _repository.DeleteAsync(-99999));
+            //InvalidDataException($"No record found for Id: {id}");
         }
 
         [Fact]
@@ -95,7 +106,7 @@ namespace JobMe.Infra.Data.Repositories.EntityFramework
             var result = await _repository.GetByIdAsync(entity.Id);
 
             // Assert
-            Assert.Equal(entity.Id, result.Id);
+            Assert.Equal(entity.Id, result?.Id);
         }
 
         [Fact]
@@ -110,17 +121,6 @@ namespace JobMe.Infra.Data.Repositories.EntityFramework
 
             // Assert
             Assert.Equal(entity.Id, result);
-        }
-
-        private Mock<DbSet<T>> MockDbSet<T>(T[] elements) where T : class
-        {
-            var queryable = elements.AsQueryable();
-            var dbSetMock = new Mock<DbSet<T>>();
-            dbSetMock.As<IQueryable<T>>().Setup(m => m.Provider).Returns(queryable.Provider);
-            dbSetMock.As<IQueryable<T>>().Setup(m => m.Expression).Returns(queryable.Expression);
-            dbSetMock.As<IQueryable<T>>().Setup(m => m.ElementType).Returns(queryable.ElementType);
-            dbSetMock.As<IQueryable<T>>().Setup(m => m.GetEnumerator()).Returns(queryable.GetEnumerator());
-            return dbSetMock;
         }
     }
 }

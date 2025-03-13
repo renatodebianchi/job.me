@@ -6,7 +6,7 @@ namespace Domain.Interfaces.Repositories
 { 
     public interface IGenericRepository<T> 
     { 
-        Task<T> GetByIdAsync(int id); 
+        Task<T?> GetByIdAsync(int id); 
         Task<IQueryable<T>> GetAllAsync(); 
         Task<int> AddAsync(T entity); 
         Task<int> UpdateAsync(T entity); 
@@ -18,7 +18,7 @@ namespace Domain.Interfaces.Repositories
             foreach (PropertyInfo sourceProp in typeof(T).GetProperties()) 
             { 
                 if (UseProperty(sourceProp)) { 
-                    PropertyInfo targetProp = typeof(T).GetProperty(sourceProp.Name); 
+                    PropertyInfo targetProp = typeof(T).GetProperty(sourceProp.Name)!; 
                     try { 
                             columns += columns.Equals(string.Empty) ? "" : ","; 
                             columns += GetColumnName(sourceProp) + " as " + sourceProp.Name; 
@@ -35,7 +35,7 @@ namespace Domain.Interfaces.Repositories
             foreach (PropertyInfo sourceProp in typeof(T).GetProperties()) 
             { 
                 if (UseProperty(sourceProp)) { 
-                    PropertyInfo targetProp = typeof(T).GetProperty(sourceProp.Name); 
+                    PropertyInfo targetProp = typeof(T).GetProperty(sourceProp.Name)!; 
                     try { 
                         if (!sourceProp.Name.Equals("id")) { 
                             columns += columns.Equals(string.Empty) ? "" : ","; 
@@ -55,7 +55,7 @@ namespace Domain.Interfaces.Repositories
             foreach (PropertyInfo sourceProp in typeof(T).GetProperties()) 
             { 
                 if (UseProperty(sourceProp)) { 
-                    PropertyInfo targetProp = typeof(T).GetProperty(sourceProp.Name); 
+                    PropertyInfo targetProp = typeof(T).GetProperty(sourceProp.Name)!; 
                     try { 
                         if (!sourceProp.Name.Equals("id")) { 
                             columns += columns.Equals(string.Empty) ? "" : ","; 
@@ -70,15 +70,14 @@ namespace Domain.Interfaces.Repositories
             return columns; 
         } 
         protected bool UseProperty(PropertyInfo prop) { 
-            bool use = true; 
             foreach (CustomAttributeData attr in prop.CustomAttributes) 
             { 
                 if (attr.AttributeType.Equals(typeof(UseProperty))) 
                 { 
-                    use = (bool) attr.ConstructorArguments[0].Value; 
+                    return bool.TryParse(attr.ConstructorArguments[0].Value?.ToString(), out bool use) && use;
                 } 
             } 
-            return use; 
+            return true; 
         } 
         protected string GetTableName(Type type) { 
             string tableName = type.Name; 
@@ -86,7 +85,7 @@ namespace Domain.Interfaces.Repositories
             { 
                 if (attr.AttributeType.Equals(typeof(System.ComponentModel.DataAnnotations.Schema.TableAttribute))) 
                 { 
-                    tableName = attr.ConstructorArguments[0].Value.ToString(); 
+                    return attr.ConstructorArguments[0].Value?.ToString() ?? tableName; 
                 } 
             } 
             return tableName; 
@@ -97,7 +96,7 @@ namespace Domain.Interfaces.Repositories
             { 
                 if (attr.AttributeType.Equals(typeof(System.ComponentModel.DataAnnotations.Schema.ColumnAttribute))) 
                 { 
-                    columnName = attr.ConstructorArguments[0].Value.ToString(); 
+                    return attr.ConstructorArguments[0].Value?.ToString() ?? columnName; 
                 } 
             } 
             return columnName; 

@@ -7,7 +7,7 @@ namespace Infra.Data.Repositories
         public abstract Task<int> AddAsync(TSource entity); 
         public abstract Task<int> DeleteAsync(int id); 
         public abstract Task<IQueryable<TSource>> GetAllAsync(); 
-        public abstract Task<TSource> GetByIdAsync(int id); 
+        public abstract Task<TSource?> GetByIdAsync(int id); 
         public abstract Task<int> UpdateAsync(TSource entity); 
         public abstract Task<int> UpdateAsync(TSource entity, bool force); 
         

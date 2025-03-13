@@ -15,7 +15,7 @@ namespace Features.Users.Add
 
         public override async Task<BaseResponse> Handle(AddUserCommandRequest request, CancellationToken cancellationToken)
         {
-            if (!request.IsValid())
+            if (!request.IsValid() || request.DataModel == null)
             {
                 return new BaseResponse
                 {

@@ -31,9 +31,14 @@ namespace Infra.Data.Repositories.EntityFramework
         { 
             try { 
                 var entity = await this.GetByIdAsync(id); 
+                
+                if (entity == null) 
+                    throw new InvalidDataException($"No record found for Id: {id}");
+
                 _context.Remove(entity); 
                 await _context.SaveChangesAsync(); 
-                return 1; 
+                
+                return id; 
             } catch (Exception e) { 
                 Console.WriteLine($"Delete record error: {e.Message}"); 
                 throw; 
@@ -44,9 +49,9 @@ namespace Infra.Data.Repositories.EntityFramework
             await Task.Delay(1); 
             return _context.Set<TSource>(); 
         } 
-        public virtual async Task<TSource> GetByIdAsync(int id) 
+        public virtual async Task<TSource?> GetByIdAsync(int id) 
         { 
-            return await _context.Set<TSource>().Where(obj => obj.Id == id).FirstOrDefaultAsync(); 
+            return await _context.Set<TSource>().Where(obj => obj.Id == id).FirstOrDefaultAsync()!;
         } 
         public virtual async Task<int> UpdateAsync(TSource entity) 
         { 

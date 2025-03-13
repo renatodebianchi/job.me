@@ -15,7 +15,7 @@ namespace Features.Users.Update
 
         public override async Task<BaseResponse> Handle(UpdateUserCommandRequest request, CancellationToken cancellationToken)
         {
-            if (!request.IsValid())
+            if (!request.IsValid() || request.DataModel == null)
             {
                 return new BaseResponse
                 {
@@ -36,7 +36,6 @@ namespace Features.Users.Update
                 };
             }
 
-            
             user.Username = request.DataModel.Username;
             user.Password = request.DataModel.Password;
             user.Email = request.DataModel.Email;

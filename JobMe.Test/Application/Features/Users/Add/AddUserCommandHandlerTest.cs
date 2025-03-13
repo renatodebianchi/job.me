@@ -1,12 +1,9 @@
-using System.Threading.Tasks;
-using Application.Responses;
 using Domain.Entities;
 using Domain.Interfaces.Repositories;
 using Features.Users.Add;
 using Moq;
-using Xunit;
 
-namespace Features.Tests.Users
+namespace JobMe.Test.Applicationion.Features.Tests.Users
 {
     public class AddUserCommandHandlerTest
     {

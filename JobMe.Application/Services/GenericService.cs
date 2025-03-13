@@ -11,7 +11,7 @@ namespace Application.Services
         { 
             Repository = sourceRepository; 
         } 
-        public async Task<TSource> GetByIdAsync(int id)  
+        public async Task<TSource?> GetByIdAsync(int id)  
         { 
             var result = await Repository.GetByIdAsync(id); 
             return result; 
