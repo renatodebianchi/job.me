@@ -15,9 +15,8 @@ namespace Domain.Entities
         public double Speed { get; set; } = 1;
         public CharacterStatus Status { get; set; } = CharacterStatus.Active;
         
-        public Character(int id, string name, int level, double maxHealth = 1, double health = 1, double physicalAtack = 1, double physicalDefense = 1, double speed = 1, CharacterStatus status = CharacterStatus.Active) : base()
+        public Character(string name, int level, double maxHealth = 1, double health = 1, double physicalAtack = 1, double physicalDefense = 1, double speed = 1, CharacterStatus status = CharacterStatus.Active) : base()
         {
-            Id = id;
             Name = name;
             Level = level;
             MaxHealth = maxHealth;
@@ -91,4 +90,5 @@ namespace Domain.Entities
             return damage;
         }
     }
+
 }

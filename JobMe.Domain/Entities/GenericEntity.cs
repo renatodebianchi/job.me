@@ -6,11 +6,10 @@ namespace Domain.Entities
     {
         public GenericEntity() 
         { 
-            Id = 0;
             CreatedAt = DateTime.Now; 
         }
 
-        [Key] 
+        [Key]
         public int Id {get; set;} 
         public DateTime CreatedAt {get; set;} 
         public DateTime? UpdatedAt {get; set;} 

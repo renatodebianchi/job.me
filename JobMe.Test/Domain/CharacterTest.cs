@@ -9,10 +9,9 @@ namespace JobMe.Test.Domain.Entities
         public void Character_ShouldInitializeCorrectly()
         {
             // Arrange & Act
-            var character = new Character(1, "Hero", 10, 100, 80, 15, 10, 5, CharacterStatus.Active);
+            var character = new Character("Hero", 10, 100, 80, 15, 10, 5, CharacterStatus.Active);
 
             // Assert
-            Assert.Equal(1, character.Id);
             Assert.Equal("Hero", character.Name);
             Assert.Equal(10, character.Level);
             Assert.Equal(100, character.MaxHealth);
@@ -27,7 +26,7 @@ namespace JobMe.Test.Domain.Entities
         public void LevelUp_ShouldIncreaseLevel()
         {
             // Arrange
-            var character = new Character(1, "Hero", 10);
+            var character = new Character("Hero", 10);
 
             // Act
             character.LevelUp();
@@ -40,7 +39,7 @@ namespace JobMe.Test.Domain.Entities
         public void TakeDamage_ShouldReduceHealth()
         {
             // Arrange
-            var character = new Character(1, "Hero", 10, 100, 80);
+            var character = new Character("Hero", 10, 100, 80);
 
             // Act
             character.TakeDamage(30);
@@ -53,7 +52,7 @@ namespace JobMe.Test.Domain.Entities
         public void TakeDamage_ShouldSetStatusToDead_WhenHealthIsZero()
         {
             // Arrange
-            var character = new Character(1, "Hero", 10, 100, 30);
+            var character = new Character("Hero", 10, 100, 30);
 
             // Act
             character.TakeDamage(30);
@@ -67,7 +66,7 @@ namespace JobMe.Test.Domain.Entities
         public void Heal_ShouldIncreaseHealth()
         {
             // Arrange
-            var character = new Character(1, "Hero", 10, 100, 50);
+            var character = new Character("Hero", 10, 100, 50);
 
             // Act
             character.Heal(30);
@@ -80,7 +79,7 @@ namespace JobMe.Test.Domain.Entities
         public void Heal_ShouldNotExceedMaxHealth()
         {
             // Arrange
-            var character = new Character(1, "Hero", 10, 100, 90);
+            var character = new Character("Hero", 10, 100, 90);
 
             // Act
             character.Heal(20);
@@ -93,7 +92,7 @@ namespace JobMe.Test.Domain.Entities
         public void ToString_ShouldReturnCorrectFormat()
         {
             // Arrange
-            var character = new Character(1, "Hero", 10);
+            var character = new Character("Hero", 10);
 
             // Act
             var result = character.ToString();
@@ -106,8 +105,8 @@ namespace JobMe.Test.Domain.Entities
         public void CalculatePhysicalAtackDamage_ShouldReturnCorrectDamage()
         {
             // Arrange
-            var attacker = new Character(1, "Attacker", 10, 100, 80, 15, 5, 5);
-            var target = new Character(2, "Target", 10, 100, 80, 10, 10, 5);
+            var attacker = new Character("Attacker", 10, 100, 80, 15, 5, 5);
+            var target = new Character("Target", 10, 100, 80, 10, 10, 5);
 
             // Act
             var damage = attacker.CalculatePhysicalAtackDamage(target);
@@ -120,8 +119,8 @@ namespace JobMe.Test.Domain.Entities
         public void CalculatePhysicalAtackDamageTaken_ShouldReturnCorrectDamage()
         {
             // Arrange
-            var attacker = new Character(1, "Attacker", 10, 100, 80, 15, 5, 5);
-            var target = new Character(2, "Target", 10, 100, 80, 10, 10, 5);
+            var attacker = new Character("Attacker", 10, 100, 80, 15, 5, 5);
+            var target = new Character("Target", 10, 100, 80, 10, 10, 5);
 
             // Act
             var damage = target.CalculatePhysicalAtackDamageTaken(attacker);

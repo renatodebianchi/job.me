@@ -16,6 +16,7 @@ namespace Infra.IoC
 
             //services.AddScoped<Domain.Interfaces.Repositories.IGenericRepository<User>, Infra.Data.Repositories.EntityFramework.UserRepository>();
             services.AddScoped<Domain.Interfaces.Repositories.IGenericRepository<User>, Infra.Data.Repositories.EntityFramework.BaseRepositoryEntityFramework<User>>();
+            services.AddScoped<Domain.Interfaces.Repositories.IGenericRepository<Character>, Infra.Data.Repositories.EntityFramework.BaseRepositoryEntityFramework<Character>>();
 
             Log.Logger = new LoggerConfiguration() 
                .WriteTo.Console() 

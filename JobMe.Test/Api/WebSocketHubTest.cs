@@ -1,4 +1,6 @@
 using Api.Hubs;
+using Domain.Entities;
+using Domain.Interfaces.Repositories;
 using MediatR;
 using Microsoft.AspNetCore.SignalR;
 using Moq;
@@ -11,6 +13,7 @@ namespace JobMe.Test.Api
         private readonly Mock<IHubCallerClients> _clientsMock;
         private readonly Mock<IGroupManager> _groupsMock;
         private readonly Mock<HubCallerContext> _contextMock;
+        private readonly Mock<IGenericRepository<Character>> _characterRepositoryMock;
         private readonly WebSocketHub _hub;
 
         public WebSocketHubTest()
@@ -19,8 +22,8 @@ namespace JobMe.Test.Api
             _clientsMock = new Mock<IHubCallerClients>();
             _groupsMock = new Mock<IGroupManager>();
             _contextMock = new Mock<HubCallerContext>();
-
-            _hub = new WebSocketHub(_mediatorMock.Object)
+            _characterRepositoryMock = new Mock<IGenericRepository<Character>>();
+            _hub = new WebSocketHub(_mediatorMock.Object, _characterRepositoryMock.Object)
             {
                 Clients = _clientsMock.Object,
                 Groups = _groupsMock.Object,

@@ -12,7 +12,7 @@ namespace JobMe.Infra.Data.Repositories.Data.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Jobs",
+                name: "Characters",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
@@ -30,7 +30,7 @@ namespace JobMe.Infra.Data.Repositories.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Jobs", x => x.Id);
+                    table.PrimaryKey("PK_Characters", x => x.Id);
                 });
         }
 
@@ -38,7 +38,7 @@ namespace JobMe.Infra.Data.Repositories.Data.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Jobs");
+                name: "Characters");
         }
     }
 }

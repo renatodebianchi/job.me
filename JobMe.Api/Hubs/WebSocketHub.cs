@@ -1,3 +1,5 @@
+using Domain.Entities;
+using Domain.Interfaces.Repositories;
 using MediatR; 
 using Microsoft.AspNetCore.SignalR; 
 namespace Api.Hubs 
@@ -8,16 +10,19 @@ namespace Api.Hubs
     public class WebSocketHub : Hub 
     { 
         private readonly IMediator _mediator;
+        private readonly IGenericRepository<Character> _characterRepository;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="WebSocketHub"/> class.
         /// </summary>
         /// <param name="mediator">The mediator instance.</param>
-        public WebSocketHub(IMediator mediator) 
+        /// <param name="characterRepository">The character repository instance.</param>
+        public WebSocketHub(IMediator mediator, IGenericRepository<Character> characterRepository) 
         { 
-            _mediator = mediator; 
+            _mediator = mediator;
+            _characterRepository = characterRepository;
         } 
-
+    
         /// <summary>
         /// Called when a new connection is established.
         /// </summary>
@@ -26,8 +31,16 @@ namespace Api.Hubs
             await base.OnConnectedAsync(); 
             // This newMessage call is what is not being received on the front end 
             // This console.WriteLine does print when I bring up the component in the front end. 
-            Console.WriteLine("Nova conexao: " + Context.ConnectionId); 
+            Console.WriteLine("New Connection: " + Context.ConnectionId); 
+
+            var char1 = new Character(Context.ConnectionId, 1);
+            await _characterRepository.AddAsync(char1);
+
             await SubscribeAsync("GeneralGroup"); 
+            
+            /*var allChar = await _characterRepository.GetAllAsync();
+            await Clients.All.SendAsync("GeneralGroup", "We have " + allChar.Count() + " characters now."); */
+
             await Clients.All.SendAsync("clientFunctionCallbackName", "TesteSocketApi"); 
             await SendMessageAsync("GeneralGroup", "clientFunctionCallbackName", "Group Message"); 
         } 
@@ -38,6 +51,11 @@ namespace Api.Hubs
         /// <param name="exception">The exception that occurred.</param>
         public override Task OnDisconnectedAsync(Exception? exception) 
         { 
+            var char1 = _characterRepository.GetAllAsync().Result.FirstOrDefault(c => c.Name == Context.ConnectionId);
+            if (char1 != null)
+            {
+                _characterRepository.DeleteAsync(char1.Id);
+            }
             return base.OnDisconnectedAsync(exception); 
         }
 
@@ -58,7 +76,6 @@ namespace Api.Hubs
         /// <param name="message">The message to send.</param>
         public async Task SendMessageAsync(string group, string callBackName, string message) 
         { 
-            //await Clients.All.SendAsync("test", message); 
             await Clients.Group(group).SendAsync(callBackName, message); 
         } 
 
@@ -84,4 +101,4 @@ namespace Api.Hubs
         } 
     } 
 
-}      
+}

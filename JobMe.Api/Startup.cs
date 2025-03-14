@@ -75,12 +75,15 @@ namespace JobMe.Api
                     c.RoutePrefix = string.Empty; 
                     string swaggerPath = string.IsNullOrWhiteSpace(c.RoutePrefix) ? "." : ".."; 
                     c.SwaggerEndpoint($"{swaggerPath}/swagger/v1/swagger.json", "JobMe.Api v1"); 
+                    c.InjectJavascript("https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/5.0.11/signalr.min.js");
+                    c.InjectJavascript("/js/WebSocketTest.js");
                 }); 
             } 
             app.UseHttpsRedirection(); 
             app.UseRouting(); 
             app.UseCors("CorsPolicy"); 
-            app.UseAuthorization(); 
+            app.UseStaticFiles(); 
+            app.UseRouting(); 
             app.UseEndpoints(endpoints => 
             { 
                 endpoints.MapControllers(); 

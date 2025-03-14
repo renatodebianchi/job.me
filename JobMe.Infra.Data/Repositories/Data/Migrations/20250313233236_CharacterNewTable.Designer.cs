@@ -59,7 +59,7 @@ namespace JobMe.Infra.Data.Repositories.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Jobs");
+                    b.ToTable("Characters");
                 });
 
             modelBuilder.Entity("Domain.Entities.User", b =>
