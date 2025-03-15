@@ -79,6 +79,12 @@ namespace Api.Hubs
             await Clients.Group(group).SendAsync(callBackName, message); 
         } 
 
+        public async Task AtackCharacterAsync(string callBackName, Character character) 
+        { 
+            character.Health -= 10;
+            await Clients.All.SendAsync(callBackName, character); 
+        } 
+
         /// <summary>
         /// Executes a task and returns a result.
         /// </summary>

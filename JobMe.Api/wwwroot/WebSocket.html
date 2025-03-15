@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>WebSocket Test</title>
+        <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    </head>
+    <body>
+        <div class="container">
+            <table style="width: 100%; vertical-align: top;">
+                <tr>
+                    <td style="width: 80%;">
+                        <div id="div1" class="wrapper">
+                            <h3 id="header1" class="opblock-tag no-desc">
+                                <span>WebSocket Test</span>
+                            </h3>
+                            <button id="connect-button">Connect</button>
+                            <button id="reconnect-button">Reconnect</button>
+                            <button id="disconnect-button">Disconnect</button>
+                        </div>
+                
+                        <hr>
+                
+                        <div id="div2" class="swagger-ui opblock-tag-section is-open">
+                            <h3 id="header2" class="opblock-tag no-desc">
+                                <span>Actions</span>
+                            </h3>
+                            <button id="send-message-button">Send Message</button>
+                            <button id="character-atack-button">Character Attack</button>
+                        </div>
+                
+                        <hr>
+                        
+                        <div id="div3" class="swagger-ui opblock-tag-section is-open">
+                            <h3 id="header3" class="opblock-tag no-desc">
+                                <span>Character</span>
+                            </h3>
+                            
+                            <button id="get-character-button">Get Character</button>
+                            <table style="width: 100%; ">
+                                <tr>
+                                    <td id="character-table" style="width: 100%;">
+                                        
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                            
+                    </td>
+                    <td style="width: 20%; vertical-align: top;">
+                        <div id="messagesDiv" class="swagger-ui opblock-tag-section is-open">
+                            <h3 id="messageHeader" class="opblock-tag no-desc">
+                                <span>Messages</span>
+                            </h3>
+                            <div id="messages"></div>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/5.0.11/signalr.min.js"></script>
+        <script src="./js/WebSocketTest.js"></script>
+    </body>
+</html>
