@@ -30,6 +30,11 @@ namespace Domain.Entities
         public void LevelUp()
         {
             Level++;
+            MaxHealth *= 1.15;
+            Health = MaxHealth;
+            PhysicalAtack *= 1.1;
+            PhysicalDefense *= 1.08;
+            Speed *= 1.05;
         }
 
         public void TakeDamage(double damage)
@@ -61,20 +66,25 @@ namespace Domain.Entities
     {
         public static double CalculatePhysicalAtackDamage(this Character character, Character target)
         {
+            if (target.Status.Equals(CharacterStatus.Dead)) return 0;
+
             double damage = character.PhysicalAtack - target.PhysicalDefense;
-            if (damage < 0)
+            if (damage <= 0)
             {
-                damage = 0;
+                damage = 1;
             }
+            
             return damage;
         }
 
         public static double CalculatePhysicalAtackDamageTaken(this Character character, Character target)
         {
+            if (character.Status.Equals(CharacterStatus.Dead)) return 0;
+
             double damage = target.PhysicalAtack - character.PhysicalDefense;
-            if (damage < 0)
+            if (damage <= 0)
             {
-                damage = 0;
+                damage = 1;
             }
             return damage;
         }

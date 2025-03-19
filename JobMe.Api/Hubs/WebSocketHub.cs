@@ -1,5 +1,7 @@
 using Domain.Entities;
 using Domain.Interfaces.Repositories;
+using Features.Characters.Add;
+using Features.Characters.Update;
 using MediatR; 
 using Microsoft.AspNetCore.SignalR; 
 namespace Api.Hubs 
@@ -79,11 +81,44 @@ namespace Api.Hubs
             await Clients.Group(group).SendAsync(callBackName, message); 
         } 
 
-        public async Task AtackCharacterAsync(string callBackName, Character character) 
+        /// <summary>
+        /// Creates a new character
+        /// </summary>
+        /// <param name="group">The group name.</param>
+        /// <param name="callBackName">The callback name.</param>
+        /// <param name="character">The new character name.</param>
+        public async Task CreateNewCharacterAsync(string group, string callBackName, Character character) 
         { 
-            character.Health -= 10;
-            await Clients.All.SendAsync(callBackName, character); 
-        } 
+            var request = new AddCharacterCommandRequest(character);
+            var response = await _mediator.Send(request);
+            if (!response.IsSuccessful)
+            {
+                await Clients.Group(group).SendAsync(callBackName, response.Message);
+                return;
+            }
+            
+            await Clients.Group(group).SendAsync(callBackName, response.Data); 
+        }
+
+        /// <summary>
+        /// Sends a message to a specified group.
+        /// </summary>
+        /// <param name="group">The group name.</param>
+        /// <param name="callBackName">The callback name.</param>
+        /// <param name="atackerId">Character atacker id.</param>
+        /// <param name="defenderId">Character defender id.</param>
+        public async Task CharacterAtackAsync(string group, string callBackName, int atackerId, int defenderId) 
+        { 
+            var request = new CharacterAtackCommandRequest(atackerId, defenderId);
+            var response = await _mediator.Send(request);
+            if (!response.IsSuccessful)
+            {
+                await Clients.Group(group).SendAsync(callBackName, response.Message);
+                return;
+            }
+            
+            await Clients.Group(group).SendAsync(callBackName, response.Data); 
+        }
 
         /// <summary>
         /// Executes a task and returns a result.

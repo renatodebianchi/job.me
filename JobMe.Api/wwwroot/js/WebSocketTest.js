@@ -10,7 +10,7 @@
 // The hub must also have the following groups:
 // - GeneralGroup
 
-console.log("WebSocketTest.js loaded");
+const charList = [];
 
 let characterCount = 0;
 
@@ -33,21 +33,73 @@ const createNewElement = (tagName, id, className, textContent) => {
     return element;
 };
 
-function updateCharacter(character) {
-    const characterElements = {
-        Name: document.getElementById('character-name-' + character.id),
-        Health: document.getElementById('character-health-' + character.id),
-        Level: document.getElementById('character-level-' + character.id),
-        PhysicalAtack: document.getElementById('character-physicalAtack-' + character.id),
-        PhysicalDefense: document.getElementById('character-physicalDefense-' + character.id),
-        Speed: document.getElementById('character-speed-' + character.id)
-    };
+function updateCharacterList() {
+    const tableContainer = document.getElementById('character-table');
+    tableContainer.innerHTML = '';
+    charList.forEach(character => {
+        updateCharacter(character);
+    });
+}
 
-    for (const key in characterElements) {
-        if (characterElements.hasOwnProperty(key)) {
-            console.log(key, character[key]);
-            characterElements[key].value = character[key];
-        }
+function updateCharacter(character) {
+    try {
+        const newColumn = document.createElement('td');
+        newColumn.style.minWidth = '250px';
+        newColumn.style.padding = '10px';
+        newColumn.style.margin = '10px';
+
+
+        const charTable = document.createElement('table');
+        const tableContainer = document.getElementById('character-table');
+        charTable.style.backgroundColor = character.Status == 0 ? "green" : "red";
+
+        newColumn.appendChild(charTable);
+        tableContainer.appendChild(newColumn);
+
+        const tableTrInicio = document.createElement('tr');
+        const tableTdInicio = document.createElement('td');
+        tableTdInicio.colSpan = 2;
+        tableTdInicio.style.textAlign = 'center';
+        const tableHrInicio = document.createElement('hr');
+        tableTdInicio.appendChild(tableHrInicio);
+        tableTrInicio.appendChild(tableTdInicio);
+        charTable.appendChild(tableTrInicio);
+
+        const fields = [
+            { label: 'Id', value: character.Id },
+            { label: 'Name', value: character.Name },
+            { label: 'Health', value: Math.floor(character.Health) },
+            { label: 'Level', value: character.Level },
+            { label: 'Physical Atack', value: Math.floor(character.PhysicalAtack) },
+            { label: 'Physical Defense', value: Math.floor(character.PhysicalDefense) },
+            { label: 'Speed', value: Math.floor(character.Speed) }
+        ];
+
+        fields.forEach(field => {
+            const row = document.createElement('tr');
+            const labelCell = document.createElement('td');
+            labelCell.textContent = field.label;
+            const valueCell = document.createElement('td');
+            valueCell.style.marginRight = '10px';
+            valueCell.style.paddingRight = '10px';
+            const input = createNewElement('input', `character-${field.label.toLowerCase()}-${character.Id}`, 'form-control', field.value);
+            input.value = field.value;
+            valueCell.appendChild(input);
+            row.appendChild(labelCell);
+            row.appendChild(valueCell);
+            charTable.appendChild(row);
+        });
+
+        const tableTrFinal = document.createElement('tr');
+        const tableTdFinal = document.createElement('td');
+        tableTdFinal.colSpan = 2;
+        tableTdFinal.style.textAlign = 'center';
+        const tableHr = document.createElement('hr');
+        tableTdFinal.appendChild(tableHr);
+        tableTrFinal.appendChild(tableTdFinal);
+        charTable.appendChild(tableTrFinal);
+    } catch (err) {
+        console.error("Error creating a new character:", err);
     }
 }
 
@@ -83,8 +135,15 @@ window.addEventListener('load', () => {
             messages.appendChild(messageElement);
         });
 
-        connection.on("charAtacked", (character) => {
-            console.log(character);
+        connection.on("charAtacked", (result) => {
+            charList[0] = result.atacker;
+            charList[1] = result.defender;
+            updateCharacterList();
+        });
+
+        connection.on("charIncluded", (character) => {
+            charList.push(character);
+            updateCharacterList();
             //updateCharacter(character);
         });
 
@@ -132,119 +191,29 @@ window.addEventListener('load', () => {
 
     getCharacterButton.addEventListener('click', async () => {
         try {
+            if (charList.length == 2) {
+                await connection.invoke("SendMessageAsync", "GeneralGroup", "clientFunctionCallbackName", "Max 2 characters");
+                return;
+            }
+
             const character = {
                 id: ++characterCount,
-                name: 'New Character',
-                health: Math.round(Math.random() * 100, 2),
-                level: Math.round(Math.random() * 100, 2),
-                physicalAtack: Math.round(Math.random() * 100, 2),
-                physicalDefense: Math.round(Math.random() * 100, 2),
-                speed: Math.round(Math.random() * 100, 2)
+                name: faker.name.findName(),
             };
-            const newColumn = document.createElement('td');
-            newColumn.style.minWidth = '250px';
-            newColumn.style.padding = '10px';
-            newColumn.style.margin = '10px';
-
-            const charTable = document.createElement('table');
-            const charTr1 = document.createElement('tr');
-            const charTr2 = document.createElement('tr');
-            const charTr3 = document.createElement('tr');
-            const charTr4 = document.createElement('tr');
-            const charTr5 = document.createElement('tr');
-            const charTr6 = document.createElement('tr');
-            const charTr7 = document.createElement('tr');
-            
-            const charTd11 = document.createElement('td'); charTd11.textContent = 'Id';
-            const charTd12 = document.createElement('td');
-            const charTd21 = document.createElement('td'); charTd21.textContent = 'Name';
-            const charTd22 = document.createElement('td');
-            const charTd31 = document.createElement('td'); charTd31.textContent = 'Health';
-            const charTd32 = document.createElement('td');
-            const charTd41 = document.createElement('td'); charTd41.textContent = 'Level';
-            const charTd42 = document.createElement('td');
-            const charTd51 = document.createElement('td'); charTd51.textContent = 'Physical Atack';
-            const charTd52 = document.createElement('td');
-            const charTd61 = document.createElement('td'); charTd61.textContent = 'Physical Defense';
-            const charTd62 = document.createElement('td');
-            const charTd71 = document.createElement('td'); charTd71.textContent = 'Speed';
-            const charTd72 = document.createElement('td');
-
-            const charInput1 = createNewElement('input', `character-id-${character.id}` , 'form-control', character.id);
-            const charInput2 = createNewElement('input', `character-name-${character.id}` , 'form-control', character.name);
-            const charInput3 = createNewElement('input', `character-health-${character.id}` , 'form-control', character.health);
-            const charInput4 = createNewElement('input', `character-level-${character.id}` , 'form-control', character.level);
-            const charInput5 = createNewElement('input', `character-physicalAtack-${character.id}` , 'form-control', character.physicalAtack);
-            const charInput6 = createNewElement('input', `character-physicalDefense-${character.id}` , 'form-control', character.physicalDefense);
-            const charInput7 = createNewElement('input', `character-speed-${character.id}` , 'form-control', character.speed);
-            
-            charInput1.value = character.id;
-            charInput2.value = character.name;
-            charInput3.value = character.health;
-            charInput4.value = character.level;
-            charInput5.value = character.physicalAtack;
-            charInput6.value = character.physicalDefense;
-            charInput7.value = character.speed;
-
-            charTd12.appendChild(charInput1);
-            charTd22.appendChild(charInput2);
-            charTd32.appendChild(charInput3);
-            charTd42.appendChild(charInput4);
-            charTd52.appendChild(charInput5);
-            charTd62.appendChild(charInput6);
-            charTd72.appendChild(charInput7);
-
-            charTr1.appendChild(charTd11);
-            charTr1.appendChild(charTd12);
-            charTr2.appendChild(charTd21);
-            charTr2.appendChild(charTd22);
-            charTr3.appendChild(charTd31);
-            charTr3.appendChild(charTd32);
-            charTr4.appendChild(charTd41);
-            charTr4.appendChild(charTd42);
-            charTr5.appendChild(charTd51);
-            charTr5.appendChild(charTd52);
-            charTr6.appendChild(charTd61);
-            charTr6.appendChild(charTd62);
-            charTr7.appendChild(charTd71);
-            charTr7.appendChild(charTd72);
-
-            charTable.appendChild(charTr1);
-            charTable.appendChild(charTr2);
-            charTable.appendChild(charTr3);
-            charTable.appendChild(charTr4);
-            charTable.appendChild(charTr5);
-            charTable.appendChild(charTr6);
-            charTable.appendChild(charTr7);
-
-            const tableTrFinal = document.createElement('tr');
-            const tableTdFinal = document.createElement('td');
-            tableTdFinal.colSpan = 2;
-            tableTdFinal.style.textAlign = 'center';
-            const tableHr = document.createElement('hr');
-            tableTdFinal.appendChild(tableHr);
-            tableTrFinal.appendChild(tableTdFinal);
-            charTable.appendChild(tableTrFinal);
-            
-            const tableContainer = document.getElementById('character-table');
-            newColumn.appendChild(charTable);
-            tableContainer.appendChild(newColumn);
+            await connection.invoke("CreateNewCharacterAsync", "GeneralGroup", "charIncluded", character);
         } catch (err) {
-            console.error("Error creating a new character:", err);
+            console.error("Error sending message:", err);
         }
     });
 
     characterAtackButton.addEventListener('click', async () => {
         try {
-            const character = {
-                name: 'Character 1',
-                health: 100,
-                level: 1,
-                physicalAtack: 10,
-                physicalDefense: 5,
-                speed: 5
-            };
-            await connection.invoke("AtackCharacterAsync", "charAtacked", character);
+            if (charList.length < 2) {
+                await connection.invoke("SendMessageAsync", "GeneralGroup", "clientFunctionCallbackName", "Requires 2 characters");
+                return;
+            }
+
+            await connection.invoke("CharacterAtackAsync", "GeneralGroup", "charAtacked", charList[0].Id, charList[1].Id);
         } catch (err) {
             console.error("Error sending message:", err);
         }
