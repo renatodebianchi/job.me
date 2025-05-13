@@ -14,6 +14,7 @@ namespace Domain.Entities
         public double PhysicalDefense { get; set; } = 1;
         public double Speed { get; set; } = 1;
         public CharacterStatus Status { get; set; } = CharacterStatus.Active;
+        public string? AvatarPath { get; set; }
         
         public Character(string name, int level, double maxHealth = 1, double health = 1, double physicalAtack = 1, double physicalDefense = 1, double speed = 1, CharacterStatus status = CharacterStatus.Active) : base()
         {

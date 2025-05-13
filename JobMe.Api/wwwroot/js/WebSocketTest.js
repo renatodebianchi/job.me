@@ -89,6 +89,72 @@ function updateCharacter(character) {
             row.appendChild(valueCell);
             charTable.appendChild(row);
         });
+        
+        // Add file upload section
+        const fileUploadRow = document.createElement('tr');
+        const fileUploadLabelCell = document.createElement('td');
+        fileUploadLabelCell.textContent = 'Avatar';
+        const fileUploadValueCell = document.createElement('td');
+        const fileInput = createNewElement('input', `character-avatar-${character.Id}`, 'form-control', '');
+        fileInput.type = 'file';
+        fileInput.addEventListener('change', async (event) => {
+            const file = event.target.files[0];
+            if (file) {
+                const formData = new FormData();
+                formData.append('avatar', file);
+                formData.append('characterId', character.Id);
+
+                try {
+                    const response = await fetch('/character/upload-avatar', {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    if (response.ok) {
+                        const result = await response.json();
+                        console.log('Avatar uploaded successfully');
+
+                        // Update the character's avatarPath in charList
+                        const charIndex = charList.findIndex(c => c.Id === character.Id);
+                        if (charIndex !== -1) {
+                            charList[charIndex].AvatarPath = result.avatarPath;
+                        }
+
+                        // Display the uploaded image
+                        const avatarImage = document.createElement('img');
+                        avatarImage.src = result.avatarPath;
+                        avatarImage.alt = 'Avatar';
+                        avatarImage.style.width = '100px';
+                        avatarImage.style.height = '100px';
+                        avatarImage.style.borderRadius = '50%';
+                        fileUploadValueCell.appendChild(avatarImage);
+
+                        event.target.style.display = 'none'; // Hide the file input after upload
+                    } else {
+                        console.error('Failed to upload avatar');
+                    }
+                } catch (error) {
+                    console.error('Error uploading avatar:', error);
+                }
+            }
+        });
+
+        if (character.AvatarPath) {
+            const avatarImage = document.createElement('img');
+            avatarImage.src = character.AvatarPath;
+            avatarImage.alt = 'Avatar';
+            avatarImage.style.width = '100px';
+            avatarImage.style.height = '100px';
+            avatarImage.style.borderRadius = '50%';
+            fileUploadValueCell.appendChild(avatarImage);
+
+        } else {
+            fileUploadValueCell.appendChild(fileInput);
+        }
+        
+        fileUploadRow.appendChild(fileUploadLabelCell);
+        fileUploadRow.appendChild(fileUploadValueCell);
+        charTable.appendChild(fileUploadRow);
 
         const tableTrFinal = document.createElement('tr');
         const tableTdFinal = document.createElement('td');
