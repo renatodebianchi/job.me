@@ -44,126 +44,161 @@ function updateCharacterList() {
 function updateCharacter(character) {
     try {
         const newColumn = document.createElement('td');
-        newColumn.style.minWidth = '250px';
+        newColumn.style.minWidth = '240px'; // Make the card wider
+        newColumn.style.width = '240px';
         newColumn.style.padding = '10px';
         newColumn.style.margin = '10px';
 
-
-        const charTable = document.createElement('table');
+        // Remove the table and use a humanoid avatar with CSS
         const tableContainer = document.getElementById('character-table');
-        charTable.style.backgroundColor = character.Status == 0 ? "green" : "red";
+        const avatarWrapper = document.createElement('div');
+        avatarWrapper.className = 'avatar-wrapper';
+        avatarWrapper.style.display = 'flex';
+        avatarWrapper.style.flexDirection = 'column';
+        avatarWrapper.style.alignItems = 'center';
+        avatarWrapper.style.margin = '20px';
+        avatarWrapper.style.position = 'relative';
+        avatarWrapper.style.width = '220px'; // Increased width for more space
+        avatarWrapper.style.height = '260px';
 
-        newColumn.appendChild(charTable);
-        tableContainer.appendChild(newColumn);
+        // Status border
+        avatarWrapper.style.border = '6px solid ' + (character.Status == 0 ? 'green' : 'red');
+        avatarWrapper.style.borderRadius = '20px';
+        avatarWrapper.style.boxShadow = '0 0 16px rgba(0,0,0,0.2)';
 
-        const tableTrInicio = document.createElement('tr');
-        const tableTdInicio = document.createElement('td');
-        tableTdInicio.colSpan = 2;
-        tableTdInicio.style.textAlign = 'center';
-        const tableHrInicio = document.createElement('hr');
-        tableTdInicio.appendChild(tableHrInicio);
-        tableTrInicio.appendChild(tableTdInicio);
-        charTable.appendChild(tableTrInicio);
+        // Simpler humanoid avatar: head and half-circle body
+        const humanoid = document.createElement('div');
+        humanoid.className = 'humanoid-avatar';
+        humanoid.style.position = 'relative';
+        humanoid.style.width = '80px';
+        humanoid.style.height = '120px';
+        humanoid.style.margin = '20px auto 0 auto'; // Center the humanoid horizontally
+        humanoid.style.left = 'unset'; // Remove any previous left positioning
+        humanoid.style.right = 'unset';
+        humanoid.style.display = 'block';
 
-        const fields = [
-            { label: 'Id', value: character.Id },
-            { label: 'Name', value: character.Name },
-            { label: 'Health', value: Math.floor(character.Health) },
-            { label: 'Level', value: character.Level },
-            { label: 'Physical Atack', value: Math.floor(character.PhysicalAtack) },
-            { label: 'Physical Defense', value: Math.floor(character.PhysicalDefense) },
-            { label: 'Speed', value: Math.floor(character.Speed) }
-        ];
+        // Head
+        const head = document.createElement('div');
+        head.style.width = '60px';
+        head.style.height = '60px';
+        head.style.background = 'linear-gradient(135deg, #ffe0b2 80%, #f5c16c 100%)';
+        head.style.borderRadius = '50%';
+        head.style.position = 'absolute';
+        head.style.left = '10px';
+        head.style.top = '0';
+        head.style.border = '2.5px solid #bfa06a';
+        head.style.boxShadow = '0 2px 8px rgba(0,0,0,0.10)';
 
-        fields.forEach(field => {
-            const row = document.createElement('tr');
-            const labelCell = document.createElement('td');
-            labelCell.textContent = field.label;
-            const valueCell = document.createElement('td');
-            valueCell.style.marginRight = '10px';
-            valueCell.style.paddingRight = '10px';
-            const input = createNewElement('input', `character-${field.label.toLowerCase()}-${character.Id}`, 'form-control', field.value);
-            input.value = field.value;
-            valueCell.appendChild(input);
-            row.appendChild(labelCell);
-            row.appendChild(valueCell);
-            charTable.appendChild(row);
-        });
-        
-        // Add file upload section
-        const fileUploadRow = document.createElement('tr');
-        const fileUploadLabelCell = document.createElement('td');
-        fileUploadLabelCell.textContent = 'Avatar';
-        const fileUploadValueCell = document.createElement('td');
-        const fileInput = createNewElement('input', `character-avatar-${character.Id}`, 'form-control', '');
-        fileInput.type = 'file';
-        fileInput.addEventListener('change', async (event) => {
-            const file = event.target.files[0];
-            if (file) {
-                const formData = new FormData();
-                formData.append('avatar', file);
-                formData.append('characterId', character.Id);
+        // Face details
+        const leftEye = document.createElement('div');
+        leftEye.style.width = '7px';
+        leftEye.style.height = '7px';
+        leftEye.style.background = '#333';
+        leftEye.style.borderRadius = '50%';
+        leftEye.style.position = 'absolute';
+        leftEye.style.left = '20px';
+        leftEye.style.top = '22px';
+        head.appendChild(leftEye);
 
-                try {
-                    const response = await fetch('/character/upload-avatar', {
-                        method: 'POST',
-                        body: formData
-                    });
+        const rightEye = document.createElement('div');
+        rightEye.style.width = '7px';
+        rightEye.style.height = '7px';
+        rightEye.style.background = '#333';
+        rightEye.style.borderRadius = '50%';
+        rightEye.style.position = 'absolute';
+        rightEye.style.left = '33px';
+        rightEye.style.top = '22px';
+        head.appendChild(rightEye);
 
-                    if (response.ok) {
-                        const result = await response.json();
-                        console.log('Avatar uploaded successfully');
+        const mouth = document.createElement('div');
+        mouth.style.width = '18px';
+        mouth.style.height = '8px';
+        mouth.style.borderBottom = '2px solid #a67c52';
+        mouth.style.position = 'absolute';
+        mouth.style.left = '21px';
+        mouth.style.top = '38px';
+        mouth.style.borderRadius = '0 0 10px 10px';
+        head.appendChild(mouth);
 
-                        // Update the character's avatarPath in charList
-                        const charIndex = charList.findIndex(c => c.Id === character.Id);
-                        if (charIndex !== -1) {
-                            charList[charIndex].AvatarPath = result.avatarPath;
-                        }
+        humanoid.appendChild(head);
 
-                        // Display the uploaded image
-                        const avatarImage = document.createElement('img');
-                        avatarImage.src = result.avatarPath;
-                        avatarImage.alt = 'Avatar';
-                        avatarImage.style.width = '100px';
-                        avatarImage.style.height = '100px';
-                        avatarImage.style.borderRadius = '50%';
-                        fileUploadValueCell.appendChild(avatarImage);
+        // Half-circle body
+        const body = document.createElement('div');
+        body.style.width = '70px';
+        body.style.height = '40px';
+        body.style.background = 'linear-gradient(135deg, #90caf9 80%, #42a5f5 100%)';
+        body.style.position = 'absolute';
+        body.style.left = '5px';
+        body.style.top = '60px';
+        body.style.borderTopLeftRadius = '40px';
+        body.style.borderTopRightRadius = '40px';
+        body.style.borderBottomLeftRadius = '40px';
+        body.style.borderBottomRightRadius = '40px';
+        body.style.borderBottom = 'none';
+        body.style.border = '2px solid #1976d2';
+        body.style.borderTop = 'none';
+        body.style.boxShadow = '0 2px 8px rgba(0,0,0,0.10)';
+        humanoid.appendChild(body);
 
-                        event.target.style.display = 'none'; // Hide the file input after upload
-                    } else {
-                        console.error('Failed to upload avatar');
-                    }
-                } catch (error) {
-                    console.error('Error uploading avatar:', error);
-                }
-            }
-        });
-
+        // Avatar image (if exists)
         if (character.AvatarPath) {
             const avatarImage = document.createElement('img');
             avatarImage.src = character.AvatarPath;
             avatarImage.alt = 'Avatar';
-            avatarImage.style.width = '100px';
-            avatarImage.style.height = '100px';
+            avatarImage.style.width = '60px';
+            avatarImage.style.height = '60px';
             avatarImage.style.borderRadius = '50%';
-            fileUploadValueCell.appendChild(avatarImage);
-
-        } else {
-            fileUploadValueCell.appendChild(fileInput);
+            avatarImage.style.position = 'absolute';
+            avatarImage.style.left = '10px';
+            avatarImage.style.top = '0';
+            avatarImage.style.border = '2px solid #bfa06a';
+            avatarImage.style.objectFit = 'cover';
+            avatarImage.style.boxShadow = '0 2px 8px rgba(0,0,0,0.15)';
+            humanoid.appendChild(avatarImage);
+            fileInput.style.display = 'none';
         }
-        
-        fileUploadRow.appendChild(fileUploadLabelCell);
-        fileUploadRow.appendChild(fileUploadValueCell);
-        charTable.appendChild(fileUploadRow);
 
-        const tableTrFinal = document.createElement('tr');
-        const tableTdFinal = document.createElement('td');
-        tableTdFinal.colSpan = 2;
-        tableTdFinal.style.textAlign = 'center';
-        const tableHr = document.createElement('hr');
-        tableTdFinal.appendChild(tableHr);
-        tableTrFinal.appendChild(tableTdFinal);
-        charTable.appendChild(tableTrFinal);
+        avatarWrapper.appendChild(humanoid);
+
+        // Character name and stats
+        const nameDiv = document.createElement('div');
+        nameDiv.textContent = character.Name;
+        nameDiv.style.fontWeight = 'bold';
+        nameDiv.style.marginTop = '10px';
+        avatarWrapper.appendChild(nameDiv);
+
+        // Stats with icons and tooltips
+        const statsDiv = document.createElement('div');
+        statsDiv.style.fontSize = '15px';
+        statsDiv.style.marginTop = '5px';
+        statsDiv.style.display = 'flex';
+        statsDiv.style.gap = '10px';
+        statsDiv.style.justifyContent = 'center';
+        // Optionally, center the stats row
+        statsDiv.style.maxWidth = '200px';
+        statsDiv.style.flexWrap = 'wrap';
+
+        // Helper to create icon span with tooltip
+        function statIcon(icon, label, value, extra) {
+            const span = document.createElement('span');
+            span.title = label;
+            span.style.display = 'inline-flex';
+            span.style.alignItems = 'center';
+            span.style.gap = '2px';
+            span.innerHTML = `<span style="font-size:17px;">${icon}</span> <span style="font-size:13px;">${value}${extra||''}</span>`;
+            return span;
+        }
+
+        // Unicode icons for stats
+        statsDiv.appendChild(statIcon('⭐', 'Level', character.Level));
+        statsDiv.appendChild(statIcon('❤️', 'Health', Math.floor(character.Health), `/${Math.floor(character.MaxHealth)}`));
+        statsDiv.appendChild(statIcon('⚔️', 'Physical Attack', Math.floor(character.PhysicalAtack)));
+        statsDiv.appendChild(statIcon('🛡️', 'Physical Defense', Math.floor(character.PhysicalDefense)));
+        statsDiv.appendChild(statIcon('💨', 'Speed', Math.floor(character.Speed)));
+        avatarWrapper.appendChild(statsDiv);
+
+        newColumn.appendChild(avatarWrapper);
+        tableContainer.appendChild(newColumn);
     } catch (err) {
         console.error("Error creating a new character:", err);
     }
